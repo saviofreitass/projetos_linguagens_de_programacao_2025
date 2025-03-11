@@ -1,0 +1,110 @@
+import os
+
+class Funcionario:
+    def __init__(self):
+        self.nome = ""
+        self.departamento = 0
+        self.horasTrab = 0.0
+        self.salarioBase = 0.0
+        self.horaExtra = 0.0
+        self.insalubridade = 0.0
+        self.bonificacao = 0.0
+        self.inss = 0.0
+        self.irpf = 0.0
+        self.plano = 20.00
+        self.salarioLiquido = 0.0
+
+def recebeInfos(func):
+    print("Digite o nome do funcionario: ")
+    func.nome = str(input())
+
+    while True:
+        print("Digite o setor: 1-Administrativo 2-Producao: ")
+        func.departamento = int(input())
+        if func.departamento == 1 or func.departamento == 2:
+            break
+    
+    print("Digite as horas trabalhadas no mes: ")
+    func.horasTrab = float(input())
+
+def calcularSalarioBase(func):
+    if func.departamento == 1:
+        func.salarioBase = func.horasTrab * 22
+    elif func.departamento == 2:
+        func.salarioBase = func.horasTrab * 12
+
+def calcularHorasExtras(func):
+    if func.horasTrab > 40:
+        if func.departamento == 1:
+            func.horaExtra = 22 * 2 * (func.horasTrab - 40)
+        elif func.departamento == 2:
+            func.horaExtra = 12 * 2 * (func.horasTrab - 40)
+    else:
+        func.horaExtra = 0
+
+def calcularInsalubridade(func):
+    if func.departamento == 2:
+        func.insalubridade = func.salarioBase * 15/100
+    else:
+        func.insalubridade = 0
+
+def calcularBonificacao(func):
+    if func.departamento == 1:
+        if func.horasTrab > 20 and func.horasTrab <= 30:
+            func.bonificacao = func.salarioBase * 3/100
+        elif func.horasTrab > 30 and func.horasTrab < 40:
+            func.bonificacao = func.salarioBase * 5/100
+        elif func.horasTrab >= 40:
+            func.bonificacao = func.salarioBase * 10/100
+        else:
+            func.bonificacao = 0
+    else:
+        func.bonificacao = 0
+
+def calcularSalarioBruto(func):
+    return func.salarioBase + func.horaExtra + func.insalubridade + func.bonificacao
+
+def calcularInss(func):
+    func.inss = calcularSalarioBruto(func) * 7/100
+
+def calcularIrpf(func):
+    func.irpf = calcularSalarioBruto(func) * 12/100
+
+def calcularSalarioLiquido(func):
+    func.salarioLiquido = calcularSalarioBruto(func) - func.inss - func.irpf - func.plano
+
+
+def imprimirInfo(func):
+    print("\n\n")
+    print("Nome do funcionario: " + func.nome)
+    print("Salario Base: R$ {:.2f}".format(func.salarioBase))
+    print("Hora Extra: R$ {:.2f}".format(func.horaExtra))
+    print("Insalubridade: R$ {:.2f}".format(func.insalubridade))
+    print("Bonificacao: R$ {:.2f}".format(func.bonificacao))
+    print("INSS: R$ {:.2f}".format(func.inss))
+    print("IRPF: R$ {:.2f}".format(func.irpf))
+    print("Plano de saude: R$ {:.2f}".format(func.plano))
+    print("Salario liquido: R$ {:.2f}".format(func.salarioLiquido))
+
+def main():
+    listaFuncionarios = [Funcionario() for _ in range(5)]
+
+    for i in range(5):
+        os.system("cls")
+        recebeInfos(listaFuncionarios[i])
+        calcularSalarioBase(listaFuncionarios[i])
+        calcularHorasExtras(listaFuncionarios[i])
+        calcularInsalubridade(listaFuncionarios[i])
+        calcularBonificacao(listaFuncionarios[i])
+        calcularInss(listaFuncionarios[i])
+        calcularIrpf(listaFuncionarios[i])
+        calcularSalarioLiquido(listaFuncionarios[i])
+
+    os.system("cls")
+
+    for i in range(5):
+        imprimirInfo(listaFuncionarios[i])
+
+    os.system("pause")
+
+main()
