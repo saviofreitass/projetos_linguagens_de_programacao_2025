@@ -16,7 +16,7 @@ public class Campeonato {
 
     public void cadastrarTime(String nome) throws SizeLimitExceededException {
         if(this.times.size()==10){
-            throw new SizeLimitExceededException();
+            throw new SizeLimitExceededException("Limite de times excedido! Número de times  = 10");
         }
         Time time = new Time(nome);
         this.times.add(time);
